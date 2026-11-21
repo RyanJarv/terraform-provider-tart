@@ -1,5 +1,7 @@
 # Terraform provider for Tart
 
+Note: wip not reviewed 
+
 A Terraform provider for managing local Tart VMs on Apple silicon macOS. It invokes the installed Tart CLI directly and targets one explicitly configured store. Tested with Tart 2.41.1.
 
 ## Build and use
