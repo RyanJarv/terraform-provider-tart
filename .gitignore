@@ -1,0 +1,6 @@
+/.terraform/
+*.tfstate
+*.tfstate.*
+/terraform-provider-tart
+*.tfplan
+.env
