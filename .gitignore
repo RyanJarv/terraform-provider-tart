@@ -2,5 +2,8 @@
 *.tfstate
 *.tfstate.*
 /terraform-provider-tart
+/provider/terraform-provider-tart
+/provider/provider
 *.tfplan
 .env
+/.idea/

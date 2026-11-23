@@ -1,4 +1,4 @@
-package main
+package provider
 
 import (
 	"context"
@@ -6,10 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/ryanjarv/terraform-provider-tart/tart"
 )
 
 type vmDataSource struct {
-	client *client
+	client *tart.Client
 }
 
 type vmDataModel struct {
@@ -29,7 +30,7 @@ func (*vmDataSource) Metadata(_ context.Context, req datasource.MetadataRequest,
 func (*vmDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
 		"name":         schema.StringAttribute{Required: true},
-		"id":           schema.StringAttribute{Computed: true},
+		"id":           schema.StringAttribute{Computed: true, Description: "VM name in the configured Tart store."},
 		"os":           schema.StringAttribute{Computed: true},
 		"cpu_count":    schema.Int64Attribute{Computed: true},
 		"memory_mib":   schema.Int64Attribute{Computed: true},
@@ -56,16 +57,16 @@ func (d *vmDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	vm, err := d.client.get(ctx, data.Name.ValueString())
+	vm, err := d.client.Get(ctx, data.Name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Cannot read Tart VM", err.Error())
 		return
 	}
-	data.ID = types.StringValue(vm.id)
+	data.ID = data.Name
 	data.OS = types.StringValue(vm.OS)
-	data.CPU = types.Int64Value(vm.CPU)
-	data.Memory = types.Int64Value(vm.Memory)
-	data.Disk = types.Float64Value(vm.Disk)
+	data.CPU = types.Int64Value(vm.CPUCount)
+	data.Memory = types.Int64Value(vm.MemoryMiB)
+	data.Disk = types.Float64Value(vm.DiskGB)
 	data.Status = types.StringValue(vm.State)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

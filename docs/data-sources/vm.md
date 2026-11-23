@@ -14,7 +14,7 @@ data "tart_vm" "base" {
 
 ## Read-only attributes
 
-- `id` is the provider's VM identity.
+- `id` is the VM name in the configured store.
 - `os` is the guest platform.
 - `cpu_count` is the configured number of vCPUs.
 - `memory_mib` is the configured memory in MiB.

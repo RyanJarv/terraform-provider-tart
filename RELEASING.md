@@ -15,9 +15,10 @@ version="${version#v}"
 release="$(mktemp -d)"
 binary="terraform-provider-tart_v$version"
 prefix="terraform-provider-tart_$version"
-GOTOOLCHAIN=local GOWORK=off GOPROXY=off GOSUMDB=off go test -mod=readonly ./...
+GOTOOLCHAIN=local GOWORK=off GOPROXY=off GOSUMDB=off go -C provider test -mod=readonly ./...
+GOTOOLCHAIN=local GOWORK=off GOPROXY=off GOSUMDB=off go -C tart test -mod=readonly ./...
 GOTOOLCHAIN=local GOWORK=off GOPROXY=off GOSUMDB=off CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 \
-  go build -mod=readonly -trimpath -ldflags "-s -w -X main.version=$version" -o "$release/$binary" .
+  go -C provider build -mod=readonly -trimpath -ldflags "-s -w -X main.version=$version" -o "$release/$binary" .
 cp terraform-registry-manifest.json "$release/${prefix}_manifest.json"
 cp LICENSE "$release/"
 (

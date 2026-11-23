@@ -1,8 +1,13 @@
-module github.com/RyanJarv/terraform-provider-tart
+module github.com/ryanjarv/terraform-provider-tart/provider
 
 go 1.25.0
 
-require github.com/hashicorp/terraform-plugin-framework v1.19.0
+require (
+	github.com/hashicorp/terraform-plugin-framework v1.19.0
+	github.com/ryanjarv/terraform-provider-tart/tart v0.0.0
+)
+
+replace github.com/ryanjarv/terraform-provider-tart/tart => ../tart
 
 require (
 	github.com/fatih/color v1.18.0 // indirect

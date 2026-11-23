@@ -6,6 +6,8 @@ manages CPU and memory, and reads VM metadata from an existing Tart store.
 
 ## Example usage
 
+With a stopped `ubuntu-base` VM in the default Tart store:
+
 ```hcl
 terraform {
   required_providers {
@@ -15,12 +17,15 @@ terraform {
   }
 }
 
-provider "tart" {
-  tart_home = "/absolute/path/to/tart-store"
+resource "tart_vm" "worker" {
+  name         = "ubuntu-worker"
+  source_image = "ubuntu-base"
+  cpu_count    = 4
+  memory_mib   = 4096
 }
 ```
 
 ## Argument reference
 
-- `tart_home` (required) is the absolute path to an existing store owned by the Terraform user.
-- `tart_path` (optional) is the absolute path to the Tart CLI. It defaults to `/opt/homebrew/bin/tart`.
+- `tart_home` (optional) is the absolute path to an existing Tart store. It defaults to `TART_HOME` when set and `~/.tart` otherwise.
+- `tart_path` (optional) is the absolute path to the Tart CLI. When omitted, the provider looks up `tart` on Terraform’s `PATH`.
